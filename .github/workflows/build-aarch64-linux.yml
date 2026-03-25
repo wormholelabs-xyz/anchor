@@ -1,0 +1,53 @@
+name: Build aarch64-unknown-linux-gnu
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Release version (e.g. 0.31.1 — no 'v' prefix)"
+        required: true
+        type: string
+
+env:
+  TARGET: aarch64-unknown-linux-gnu
+  VERSION: ${{ inputs.version }}
+
+jobs:
+  build:
+    name: Build and publish aarch64-unknown-linux-gnu binary
+    runs-on: ubuntu-24.04-arm
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout tag v${{ inputs.version }}
+        uses: actions/checkout@v4
+        with:
+          ref: v${{ inputs.version }}
+
+      - name: Install Rust stable toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Install system dependencies
+        run: sudo apt-get update && sudo apt-get install -y libudev-dev
+
+      - name: Build release binary
+        run: cargo build --release --locked --package anchor-cli
+
+      - name: Rename binary
+        run: mv target/release/anchor "anchor-${VERSION}-${TARGET}"
+
+      - name: Create or update GitHub release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          tag="v${VERSION}"
+          asset="anchor-${VERSION}-${TARGET}"
+
+          # Create the release if it doesn't already exist
+          if ! gh release view "$tag" > /dev/null 2>&1; then
+            gh release create "$tag" --title "$tag" --target "$(git rev-parse HEAD)" --notes "aarch64-unknown-linux-gnu binary for Anchor ${tag}"
+          fi
+
+          # Upload the binary (--clobber replaces an existing asset with the same name)
+          gh release upload "$tag" "$asset" --clobber
