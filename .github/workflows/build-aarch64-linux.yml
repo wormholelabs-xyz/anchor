@@ -19,7 +19,6 @@ jobs:
   build:
     name: Build and publish aarch64-unknown-linux-gnu binary
     runs-on: ubuntu-24.04-arm
-    permissions: write-all
     steps:
       - name: Checkout tag v${{ inputs.version }}
         uses: actions/checkout@v4
@@ -47,7 +46,7 @@ jobs:
 
           # Create the release if it doesn't already exist
           if ! gh release view "$tag" > /dev/null 2>&1; then
-            gh release create "$tag" --title "$tag" --target "$(git rev-parse HEAD)" --notes "aarch64-unknown-linux-gnu binary for Anchor ${tag}"
+            gh release create "$tag" --title "$tag" --notes "aarch64-unknown-linux-gnu binary for Anchor ${tag}"
           fi
 
           # Upload the binary (--clobber replaces an existing asset with the same name)
