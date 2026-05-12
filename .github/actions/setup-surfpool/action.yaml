@@ -3,7 +3,7 @@ description: "Installs and caches the Surfpool CLI"
 runs:
   using: "composite"
   steps:
-    - uses: actions/cache@v3
+    - uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7 # v5
       name: Cache Surfpool Binary
       id: cache-surfpool
       with:
@@ -13,7 +13,7 @@ runs:
         # Issue: https://github.com/solana-foundation/anchor/issues/4160
         key: surfpool-${{ runner.os }}-v${{ env.SURFPOOL_CLI_VERSION }}
 
-    - uses: nick-fields/retry@v2
+    - uses: nick-fields/retry@ad984534de44a9489a53aefd81eb77f87c70dc60 # v4
       if: steps.cache-surfpool.outputs.cache-hit != 'true'
       with:
         retry_wait_seconds: 300
