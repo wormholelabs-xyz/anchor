@@ -3,7 +3,11 @@ on:
   pull_request:
     paths: [".github/workflows/**"]
   push:
-    branches: [main]
+    branches: [master]
+
+permissions:
+  contents: read
+  packages: read
 
 jobs:
   check:
