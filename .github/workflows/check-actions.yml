@@ -1,0 +1,13 @@
+name: Check Allowed Actions
+on:
+  pull_request:
+    paths: [".github/workflows/**"]
+  push:
+    branches: [main]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+      - uses: wormholelabs-xyz/action-audit/.github/actions/check-actions@0d1e012511a9ff9cf0f441c514ebb743556e42de
