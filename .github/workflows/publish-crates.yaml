@@ -20,15 +20,16 @@ jobs:
         with:
           persist-credentials: false
 
-      - uses: dtolnay/rust-toolchain@3c5f7ea28cd621ae0bf5283f0e981fb97b8a7af9 # master
-        with:
-          toolchain: stable
+      - name: Install Rust stable toolchain
+        run: |
+          rustup toolchain install stable --no-self-update
+          rustup default stable
 
       - name: Install cargo-release
         run: cargo install cargo-release --version 1.1.1 --locked
 
       - name: Publish crates
-        run: |
+        run: | # zizmor: ignore[use-trusted-publishing]
           set -xeuo pipefail
 
           echo "Publishing crates as a dry-run"
@@ -50,9 +51,10 @@ jobs:
         with:
           persist-credentials: false
 
-      - uses: dtolnay/rust-toolchain@3c5f7ea28cd621ae0bf5283f0e981fb97b8a7af9 # master
-        with:
-          toolchain: stable
+      - name: Install Rust stable toolchain
+        run: |
+          rustup toolchain install stable --no-self-update
+          rustup default stable
 
       - name: Install cargo-release
         run: cargo install cargo-release --version 1.1.1 --locked

@@ -119,7 +119,6 @@ jobs:
     uses: ./.github/workflows/publish-crates.yaml
     with:
       dry_run: false
-    secrets: inherit
 
   publish-npmjs:
     name: Publish npmjs packages
@@ -131,7 +130,6 @@ jobs:
     uses: ./.github/workflows/publish-npmjs.yaml
     with:
       dry_run: false
-    secrets: inherit
 
   publish-dockerhub:
     name: Publish Docker image to Dockerhub

@@ -46,10 +46,13 @@ jobs:
         with:
           persist-credentials: false
 
-      - uses: dtolnay/rust-toolchain@3c5f7ea28cd621ae0bf5283f0e981fb97b8a7af9 # master
-        with:
-          toolchain: stable
-          target: ${{ matrix.target }}
+      - name: Install Rust toolchain
+        env:
+          TARGET: ${{ matrix.target }}
+        run: |
+          rustup toolchain install stable --no-self-update
+          rustup default stable
+          rustup target add "$TARGET"
 
       - name: Install dependencies (Linux)
         if: runner.os == 'Linux'
